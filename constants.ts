@@ -6,48 +6,81 @@ export const MOCK_TRACKS: Track[] = [
     title: 'Deep Sleep Therapy',
     artist: 'SoulWave Originals',
     category: Category.SLEEP,
-    duration: 1800,
+    duration: 372, // Updated to match sample audio approx duration
     imageUrl: 'https://picsum.photos/seed/sleep1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
   },
   {
     id: '2',
     title: 'Morning Clarity',
     artist: 'Mindful Minds',
     category: Category.MEDITATION,
-    duration: 600,
+    duration: 420,
     imageUrl: 'https://picsum.photos/seed/meditate1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
   },
   {
     id: '3',
     title: 'Delta Waves 432Hz',
     artist: 'Frequency Healer',
     category: Category.HEALING,
-    duration: 3600,
+    duration: 300,
     imageUrl: 'https://picsum.photos/seed/heal1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'
   },
   {
     id: '4',
     title: 'Forest Rain',
     artist: 'Nature Sounds',
     category: Category.NATURE,
-    duration: 1200,
+    duration: 300,
     imageUrl: 'https://picsum.photos/seed/nature1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
   },
   {
     id: '5',
     title: 'Deep Focus Flow',
     artist: 'Study LoFi',
     category: Category.FOCUS,
-    duration: 2400,
+    duration: 350,
     imageUrl: 'https://picsum.photos/seed/focus1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'
   },
   {
     id: '6',
     title: 'Anxiety Release',
     artist: 'Dr. Calm',
     category: Category.HEALING,
-    duration: 900,
+    duration: 300,
     imageUrl: 'https://picsum.photos/seed/anxiety/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'
+  },
+  {
+    id: '7',
+    title: 'Surah Ar-Rahman',
+    artist: 'Mishary Al Afasy',
+    category: Category.QURAN,
+    duration: 320,
+    imageUrl: 'https://picsum.photos/seed/quran1/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3'
+  },
+  {
+    id: '8',
+    title: 'Morning Adhkar',
+    artist: 'SoulWave Islamic',
+    category: Category.QURAN,
+    duration: 280,
+    imageUrl: 'https://picsum.photos/seed/adhkar/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'
+  },
+  {
+    id: '9',
+    title: 'Ayatul Kursi (Loop)',
+    artist: 'Recitation',
+    category: Category.QURAN,
+    duration: 300,
+    imageUrl: 'https://picsum.photos/seed/ayat/400/400',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3'
   }
 ];
 

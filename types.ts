@@ -1,4 +1,6 @@
 export enum View {
+  SPLASH = 'SPLASH',
+  AUTH = 'AUTH',
   ONBOARDING = 'ONBOARDING',
   HOME = 'HOME',
   EXPLORE = 'EXPLORE',
@@ -12,7 +14,8 @@ export enum Category {
   MEDITATION = 'Meditation',
   FOCUS = 'Focus',
   HEALING = 'Healing',
-  NATURE = 'Nature'
+  NATURE = 'Nature',
+  QURAN = 'Quran'
 }
 
 export interface Track {
@@ -30,4 +33,12 @@ export interface UserStats {
   streak: number;
   totalMinutes: number;
   sessionsCompleted: number;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  stats?: UserStats;
 }

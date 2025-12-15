@@ -1,13 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SoulWave Therapy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        /* Light Mode (Default) Variables */
+        --soul-dark: #f8fafc;        /* Slate 50 - Main Background */
+        --soul-darker: #ffffff;      /* White - Nav/Header/Modals */
+        --soul-surface: #e2e8f0;     /* Slate 200 - Inputs/Secondary backgrounds */
+        --soul-card: #ffffff;        /* White - Cards */
+        --soul-primary: #0d9488;     /* Teal 600 - Primary (Darker for visibility on light) */
+        --soul-secondary: #3b82f6;   /* Blue 500 */
+        --soul-text: #0f172a;        /* Slate 900 - Main Text */
+        --soul-muted: #64748b;       /* Slate 500 - Muted Text */
+      }
+
+      .dark {
+        /* Dark Mode Overrides */
+        --soul-dark: #0f172a;        /* Slate 900 - Main Background */
+        --soul-darker: #020617;      /* Slate 950 - Nav/Header/Modals */
+        --soul-surface: #1e293b;     /* Slate 800 - Inputs/Secondary backgrounds */
+        --soul-card: #1e293b;        /* Slate 800 - Cards */
+        --soul-primary: #2dd4bf;     /* Teal 400 - Primary (Brighter for dark mode) */
+        --soul-secondary: #3b82f6;   /* Blue 500 */
+        --soul-text: #f8fafc;        /* Slate 50 - Main Text */
+        --soul-muted: #94a3b8;       /* Slate 400 - Muted Text */
+      }
+
+      body {
+        background-color: var(--soul-dark);
+        color: var(--soul-text);
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      /* Hide scrollbar for clean UI */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Custom Utilities */
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .dark .glass {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+    </style>
+
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -15,17 +71,20 @@
             },
             colors: {
               soul: {
-                dark: '#0f172a', // Slate 900
-                darker: '#020617', // Slate 950
-                primary: '#2dd4bf', // Teal 400
-                secondary: '#3b82f6', // Blue 500
-                accent: '#8b5cf6', // Violet 500
-                surface: '#1e293b', // Slate 800
+                dark: 'var(--soul-dark)',
+                darker: 'var(--soul-darker)',
+                primary: 'var(--soul-primary)',
+                secondary: 'var(--soul-secondary)',
+                surface: 'var(--soul-surface)',
+                card: 'var(--soul-card)',
+                text: 'var(--soul-text)',
+                muted: 'var(--soul-muted)',
               }
             },
             animation: {
               'breathe': 'breathe 8s ease-in-out infinite',
               'float': 'float 6s ease-in-out infinite',
+              'spin-slow': 'spin 10s linear infinite',
             },
             keyframes: {
               breathe: {
@@ -41,21 +100,6 @@
         },
       }
     </script>
-    <style>
-      body {
-        background-color: #0f172a;
-        color: #f1f5f9;
-        -webkit-font-smoothing: antialiased;
-      }
-      /* Hide scrollbar for clean UI */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
   <script type="importmap">
 {
   "imports": {
