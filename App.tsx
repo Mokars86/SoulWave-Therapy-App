@@ -178,7 +178,7 @@ const Onboarding: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   );
 };
 
-const HomePage: React.FC<{ user: User | null, onPlay: (t: Track) => void }> = ({ user, onPlay }) => {
+const HomePage: React.FC<{ user: User | null, onPlay: (t: Track) => void, likedTrackIds: Set<string>, onToggleLike: (id: string) => void }> = ({ user, onPlay, likedTrackIds, onToggleLike }) => {
   const hours = new Date().getHours();
   const greeting = hours < 12 ? "Good Morning" : hours < 18 ? "Good Afternoon" : "Good Evening";
   
@@ -301,6 +301,12 @@ const HomePage: React.FC<{ user: User | null, onPlay: (t: Track) => void }> = ({
               <h4 className="text-soul-text font-bold mb-1 group-hover:text-soul-primary transition-colors">{track.title}</h4>
               <p className="text-soul-muted text-xs font-medium">{Math.floor(track.duration / 60)} mins • {track.category}</p>
             </div>
+             <button 
+                onClick={(e) => { e.stopPropagation(); onToggleLike(track.id); }}
+                className={`p-2 rounded-full mr-2 transition-colors ${likedTrackIds.has(track.id) ? 'text-red-500' : 'text-soul-muted hover:text-soul-text'}`}
+             >
+                <Heart size={20} fill={likedTrackIds.has(track.id) ? "currentColor" : "none"} />
+             </button>
             <button className="w-9 h-9 rounded-full bg-soul-surface flex items-center justify-center text-soul-text hover:bg-soul-primary hover:text-white transition-colors shadow-sm">
               <Play size={16} fill="currentColor" className="ml-0.5"/>
             </button>
@@ -311,7 +317,7 @@ const HomePage: React.FC<{ user: User | null, onPlay: (t: Track) => void }> = ({
   );
 };
 
-const ExplorePage: React.FC<{ onPlay: (t: Track) => void }> = ({ onPlay }) => {
+const ExplorePage: React.FC<{ onPlay: (t: Track) => void, likedTrackIds: Set<string>, onToggleLike: (id: string) => void }> = ({ onPlay, likedTrackIds, onToggleLike }) => {
   const [filter, setFilter] = useState('All');
   
   const filteredTracks = filter === 'All' ? MOCK_TRACKS : MOCK_TRACKS.filter(t => t.category === filter);
@@ -343,7 +349,7 @@ const ExplorePage: React.FC<{ onPlay: (t: Track) => void }> = ({ onPlay }) => {
 
       <div className="grid grid-cols-2 gap-4">
         {filteredTracks.map(track => (
-          <div key={track.id} className="group cursor-pointer" onClick={() => onPlay(track)}>
+          <div key={track.id} className="group cursor-pointer relative" onClick={() => onPlay(track)}>
             <div className="relative aspect-square rounded-2xl overflow-hidden mb-3 shadow-sm">
               <img src={track.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={track.title} />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -355,6 +361,14 @@ const ExplorePage: React.FC<{ onPlay: (t: Track) => void }> = ({ onPlay }) => {
                 {Math.floor(track.duration / 60)} min
               </div>
             </div>
+            
+            <button 
+                onClick={(e) => { e.stopPropagation(); onToggleLike(track.id); }}
+                className={`absolute top-2 left-2 p-2 rounded-full backdrop-blur-md bg-black/20 transition-colors z-10 ${likedTrackIds.has(track.id) ? 'text-red-500' : 'text-white/70 hover:text-white'}`}
+             >
+                <Heart size={16} fill={likedTrackIds.has(track.id) ? "currentColor" : "none"} />
+             </button>
+
             <h4 className="text-soul-text font-bold text-sm truncate group-hover:text-soul-primary transition-colors">{track.title}</h4>
             <p className="text-soul-muted text-xs font-medium">{track.artist}</p>
           </div>
@@ -362,6 +376,54 @@ const ExplorePage: React.FC<{ onPlay: (t: Track) => void }> = ({ onPlay }) => {
       </div>
     </div>
   );
+};
+
+const FavoritesPage: React.FC<{ onPlay: (t: Track) => void, likedTrackIds: Set<string>, onToggleLike: (id: string) => void }> = ({ onPlay, likedTrackIds, onToggleLike }) => {
+    const favoriteTracks = MOCK_TRACKS.filter(t => likedTrackIds.has(t.id));
+
+    return (
+        <div className="pb-24 pt-8 px-6 h-full flex flex-col">
+            <h2 className="text-3xl font-bold text-soul-text mb-6 tracking-tight">Favorites</h2>
+            
+            {favoriteTracks.length === 0 ? (
+                <div className="flex-1 flex flex-col items-center justify-center text-center pb-20 opacity-0 animate-in fade-in zoom-in duration-500">
+                    <div className="w-20 h-20 rounded-full bg-soul-surface flex items-center justify-center mb-6 text-soul-muted/50">
+                        <Heart size={40} />
+                    </div>
+                    <h3 className="text-xl font-bold text-soul-text mb-2">No favorites yet</h3>
+                    <p className="text-soul-muted max-w-xs">Start exploring and save the sounds that bring you peace.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {favoriteTracks.map(track => (
+                    <div key={track.id} className="group cursor-pointer relative" onClick={() => onPlay(track)}>
+                        <div className="relative aspect-square rounded-2xl overflow-hidden mb-3 shadow-sm">
+                        <img src={track.imageUrl} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={track.title} />
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20">
+                            <Play size={20} fill="white" className="text-white ml-1" />
+                            </div>
+                        </div>
+                        <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] text-white font-medium">
+                            {Math.floor(track.duration / 60)} min
+                        </div>
+                        </div>
+                        
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); onToggleLike(track.id); }}
+                            className={`absolute top-2 left-2 p-2 rounded-full backdrop-blur-md bg-black/20 transition-colors z-10 text-red-500 hover:scale-110`}
+                        >
+                            <Heart size={16} fill="currentColor" />
+                        </button>
+
+                        <h4 className="text-soul-text font-bold text-sm truncate group-hover:text-soul-primary transition-colors">{track.title}</h4>
+                        <p className="text-soul-muted text-xs font-medium">{track.artist}</p>
+                    </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 };
 
 const ProfilePage: React.FC<{ user: User | null, onLogout: () => void, isDarkMode: boolean, onToggleTheme: () => void }> = ({ user, onLogout, isDarkMode, onToggleTheme }) => {
@@ -453,8 +515,10 @@ const App: React.FC = () => {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  // Theme state
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Favorites State
+  const [likedTrackIds, setLikedTrackIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     // Initial Theme Setup
@@ -468,6 +532,16 @@ const App: React.FC = () => {
     }
 
     const initApp = () => {
+      // Load favorites
+      const savedFavorites = localStorage.getItem('soulwave_favorites');
+      if (savedFavorites) {
+        try {
+            setLikedTrackIds(new Set(JSON.parse(savedFavorites)));
+        } catch (e) {
+            console.error("Failed to parse favorites", e);
+        }
+      }
+
       // Minimum splash screen duration of 2 seconds
       setTimeout(() => {
         const savedUser = localStorage.getItem('soulwave_user');
@@ -531,15 +605,26 @@ const App: React.FC = () => {
     setIsPlaying(false);
   };
 
+  const handleToggleLike = (trackId: string) => {
+    const newSet = new Set(likedTrackIds);
+    if (newSet.has(trackId)) {
+        newSet.delete(trackId);
+    } else {
+        newSet.add(trackId);
+    }
+    setLikedTrackIds(newSet);
+    localStorage.setItem('soulwave_favorites', JSON.stringify(Array.from(newSet)));
+  };
+
   const renderView = () => {
     switch(view) {
       case View.SPLASH: return <SplashScreen />;
       case View.AUTH: return <AuthPage onAuthSuccess={handleAuthSuccess} />;
       case View.ONBOARDING: return <Onboarding onComplete={completeOnboarding} />;
-      case View.HOME: return <HomePage user={currentUser} onPlay={playTrack} />;
-      case View.EXPLORE: return <ExplorePage onPlay={playTrack} />;
+      case View.HOME: return <HomePage user={currentUser} onPlay={playTrack} likedTrackIds={likedTrackIds} onToggleLike={handleToggleLike} />;
+      case View.EXPLORE: return <ExplorePage onPlay={playTrack} likedTrackIds={likedTrackIds} onToggleLike={handleToggleLike} />;
       case View.SESSIONS: return <div className="p-8 text-center text-soul-muted mt-20">Your library is empty.</div>;
-      case View.FAVORITES: return <div className="p-8 flex flex-col items-center justify-center h-full mt-20"><Heart size={48} className="text-soul-muted mb-4"/><p className="text-soul-muted">Your calm space is waiting.</p></div>;
+      case View.FAVORITES: return <FavoritesPage onPlay={playTrack} likedTrackIds={likedTrackIds} onToggleLike={handleToggleLike} />;
       case View.PROFILE: return <ProfilePage user={currentUser} onLogout={handleLogout} isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />;
       default: return null;
     }
@@ -561,7 +646,9 @@ const App: React.FC = () => {
         <Player 
           track={currentTrack} 
           isPlaying={isPlaying} 
+          isLiked={currentTrack ? likedTrackIds.has(currentTrack.id) : false}
           onTogglePlay={togglePlay} 
+          onToggleLike={() => currentTrack && handleToggleLike(currentTrack.id)}
           onClose={() => setCurrentTrack(null)} 
           onTrackEnd={handleTrackEnd}
         />
@@ -583,7 +670,7 @@ const App: React.FC = () => {
             <span className="text-[10px] font-bold">Sessions</span>
           </button>
           <button onClick={() => setView(View.FAVORITES)} className={`flex flex-col items-center gap-1 transition-colors ${view === View.FAVORITES ? 'text-soul-primary' : 'text-soul-muted hover:text-soul-text'}`}>
-            <Heart size={24} strokeWidth={view === View.FAVORITES ? 2.5 : 2} />
+            <Heart size={24} strokeWidth={view === View.FAVORITES ? 2.5 : 2} fill={view === View.FAVORITES ? "currentColor" : "none"} />
             <span className="text-[10px] font-bold">Favorites</span>
           </button>
           <button onClick={() => setView(View.PROFILE)} className={`flex flex-col items-center gap-1 transition-colors ${view === View.PROFILE ? 'text-soul-primary' : 'text-soul-muted hover:text-soul-text'}`}>

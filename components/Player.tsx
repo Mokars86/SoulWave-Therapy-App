@@ -5,17 +5,18 @@ import { Track } from '../types';
 interface PlayerProps {
   track: Track | null;
   isPlaying: boolean;
+  isLiked: boolean;
   onTogglePlay: () => void;
+  onToggleLike: () => void;
   onClose: () => void; // To minimize
   onTrackEnd?: () => void;
 }
 
-export const Player: React.FC<PlayerProps> = ({ track, isPlaying, onTogglePlay, onClose, onTrackEnd }) => {
+export const Player: React.FC<PlayerProps> = ({ track, isPlaying, isLiked, onTogglePlay, onToggleLike, onClose, onTrackEnd }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -138,6 +139,15 @@ export const Player: React.FC<PlayerProps> = ({ track, isPlaying, onTogglePlay, 
           </div>
           <div className="flex items-center gap-2">
             <button 
+              className="p-2 text-soul-muted hover:text-red-500 active:scale-95 transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleLike();
+              }}
+            >
+               <Heart size={20} fill={isLiked ? "#ef4444" : "none"} className={isLiked ? "text-red-500" : ""} />
+            </button>
+            <button 
               className="p-3 rounded-full bg-soul-primary text-white shadow-lg shadow-soul-primary/30 active:scale-95 transition-transform"
               onClick={(e) => {
                 e.stopPropagation();
@@ -188,7 +198,10 @@ export const Player: React.FC<PlayerProps> = ({ track, isPlaying, onTogglePlay, 
                 <h2 className="text-2xl font-bold text-soul-text mb-1">{track.title}</h2>
                 <p className="text-soul-muted">{track.artist} • {track.category}</p>
               </div>
-              <button onClick={() => setIsLiked(!isLiked)} className={`p-2 rounded-full transition-colors ${isLiked ? 'text-red-500' : 'text-soul-muted hover:text-soul-text hover:bg-soul-surface'}`}>
+              <button 
+                onClick={onToggleLike} 
+                className={`p-2 rounded-full transition-colors active:scale-95 ${isLiked ? 'text-red-500' : 'text-soul-muted hover:text-soul-text hover:bg-soul-surface'}`}
+              >
                 <Heart size={28} fill={isLiked ? "currentColor" : "none"} />
               </button>
             </div>
